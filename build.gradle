@@ -1,0 +1,70 @@
+buildscript{
+	repositories{
+		mavenLocal()
+		maven{
+			url "http://git.vintec.mx:8888/artifactory/libs-release/"
+		}
+		maven{
+			url "http://git.vintec.mx:8888/artifactory/libs-snapshot"
+		}
+		jcenter()
+		mavenCentral()
+	}
+	configurations.classpath{
+		resolutionStrategy{
+			cacheDynamicVersionsFor 0, 'seconds'
+			cacheChangingModulesFor 0, 'seconds'
+		}
+	}
+}
+
+group = "com.roomie.cursograils"
+version = '0.1.0'
+apply plugin: 'eclipse'
+
+subprojects {
+	buildscript{
+		repositories{
+			mavenLocal()
+			maven{
+				url "http://git.vintec.mx:8888/artifactory/libs-snapshot"
+			}
+			jcenter()
+			mavenCentral()
+		}
+		configurations.classpath {
+			resolutionStrategy {
+				cacheDynamicVersionsFor 0, 'seconds'
+				cacheChangingModulesFor 0, 'seconds'
+			}
+		}
+	}
+	
+	apply plugin: 'eclipse'
+	
+	repositories {
+		maven{
+			url vintec_main_repository
+		}
+		jcenter()
+		mavenCentral()
+	}
+	eclipse.project {
+			natures 'org.springsource.ide.eclipse.gradle.core.nature','org.eclipse.jdt.groovy.core.groovyNature'
+	  }
+}
+
+task wrapper(type:Wrapper){
+	description = "Generaqtes gradlew[.bat] scripts"
+	gradleVersion = "2.12"
+
+	doLast(){
+		def gradleOpts="-Xmx1024m"
+		def gradleBatOpts="-Xmx1024m"
+
+		File wrapperFile = file("gradlew")
+		wrapperFile.text = wrapperFile.text.replace("DEFAULT_JVM_OPTS=","GRADLE_OPTS=\"$gradleOpts \$GRADLE_OPTS\"\nDEFAULT_JVM_OPTS=")
+		File wrapperBatFile = file("gradlew.bat")
+		wrapperBatFile.text = wrapperBatFile.text.replace("set DEFAULT_JVM_OPTS=","set GRADLE_OPTS=$gradleBatOpts %GRADLE_OPTS%\nset DEFAULT_JVM_OPTS=")
+	}
+}

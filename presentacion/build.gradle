@@ -1,0 +1,258 @@
+buildscript{
+	dependencies{
+		classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.11'
+		classpath  'org.jruby:jruby-complete:1.7.20'
+		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
+		classpath 'com.github.jruby-gradle:jruby-gradle-plugin:1.1.4'
+		classpath 'org.ysb33r.gradle:vfs-gradle-plugin:1.0-beta1'
+		classpath 'commons-httpclient:commons-httpclient:3.1'
+	}
+}
+plugins {
+	id 'org.asciidoctor.convert' version '1.5.2'
+	id 'com.github.jruby-gradle.base' version '1.1.4'
+}
+
+apply plugin: 'org.ysb33r.vfs'
+
+asciidoctorj {
+	version = '1.6.0-SNAPSHOT'
+}
+
+dependencies {
+
+	gems 'rubygems:asciidoctor-diagram:1.2.1'
+	gems 'rubygems:haml:4.0.6'
+	gems 'rubygems:prawn:2.0.1'
+
+	asciidoctor 'org.jruby:jruby-complete:9.0.1.0'
+	jrubyExec 'org.jruby:jruby-complete:9.0.1.0'
+}
+
+task html(type:org.asciidoctor.gradle.AsciidoctorTask,description:"Genera documentación en formato HTML5",
+	group:"Documentación") {
+	dependsOn jrubyPrepare
+	requires = ['asciidoctor-diagram']
+
+	logDocuments = true
+
+	gemPath =jruby.gemInstallDir
+
+	options doctype: 'book',
+	'--verbose':'',
+	'--trace':''
+
+	backends = ['html5']
+
+	sourceDir = file("documentacion")
+
+	outputDir = file("${buildDir}/documentacion")
+	
+	if(project.hasProperty('docs')){
+		println "Using docs ${docs}"
+		sources  {
+			if(docs.indexOf(',')!=-1){
+				docs.split(",").each{
+					include "**/${it}.adoc"
+				}
+			}
+			else{
+				include "**/${docs}.adoc"
+			}
+		}
+	}
+	else{
+//		println "Puede usar -Pdocs=<documento> para solo generar un documento específico"
+	}
+
+	attributes	'build-gradle': file('build.gradle'),
+		'source-highlighter' : 'coderay',
+		'imagesdir':'images',
+		'toc':'left',
+		'icons': 'font',
+		'setanchors':'true',
+		'idprefix':'',
+		'idseparator':'-',
+		'docinfo1':'true',
+		'linkcss':'true',
+		'doctype':'book',
+		'projectDir':projectDir,
+		'gemPath':jruby.gemInstallDir,
+		'shaape':shaape,
+		//Atributos generales
+		'toc-title': 'Contenido',
+		'toclevels': '5',
+		'table-caption':  'Tabla',
+		'note-caption': 'Nota',
+		'figure-caption': 'Figura',
+		'appendix-caption': 'Apéndice'
+
+	resources {
+		from('src/main/documentacion') {
+			 include '**/*.png'
+			 include '**/*.jpg'
+			 include '**/*.ods'
+			 include '**/*.odt'
+			 include '**/*.docx'
+			 include '**/*.csv'
+		}
+	}
+}
+
+
+ext{
+	deckjsVersion = 'master'
+	asciidoctorBackendVersion = 'master'
+	downloadDir = new File(buildDir,'download')
+	templateDir = new File(downloadDir,'templates')
+	deckjsDir = new File(downloadDir,'deck.js/deck.js-master')
+}
+
+task deck(type:org.asciidoctor.gradle.AsciidoctorTask,description:"Genera presentación en diapositivas",
+	group:"Documentación"){
+	
+	dependsOn jrubyPrepare
+	requires = ['asciidoctor-diagram']
+	
+	logDocuments = true
+	gemPath =jruby.gemInstallDir
+	
+	backends = ['html5']
+	
+	options=[
+		template_dirs: ["${projectDir}/build/download/templates/haml/deckjs".toString()],
+			"-r":"asciidoctor-diagram"
+	]
+	
+	sourceDir = file("documentacion")
+	
+	outputDir = file ("build/presentaciones")
+	
+	attributes 'build-gradle':file('build.gradle'),
+		'sourcedir':'src/main/presentaciones',
+		'endpoint-url':'http://example.org',
+		'source-hightlighter':'coderay',
+		
+		'deckjs_theme':'swiss',
+		'deckjs_transition':'horizontal-slide',
+		'navigation':'',
+		'goto':'',
+		'menu':'',
+		'status':'',
+		'split':'',
+		'blank':'',
+		'icons':'font',
+		'viewport':'width=1000, user-scalable=yes',
+		'sectids!':'',
+		'showtitle':'',
+		
+		'stylesdir':'deck.js/deck.js-master/themes/style',
+		'imagesdir':'images',
+		'toc':'left',
+		'setanchors':'true',
+		'idprefix':'',
+		'idseparator':'-',
+		'docinfo1':'true',
+		'skip-registry':'true',
+		'encoding':'UTF-8'
+		
+	resources{
+		from(sourceDir){
+			include 'images/**'
+		}
+		from(downloadDir){
+			include 'deck.js/**'
+		}
+		from('src/main/presentaciones'){
+			include '**/*.png'
+			include '**/*.jpg'
+			include '**/*.zip'
+			include '**/*.jar'
+			include '**/*.sql'
+			include '**/*.svg'
+		}
+	}
+	
+
+}
+	
+deck.doFirst{
+	mkdir downloadDir
+	vfs{
+		if(!file('buid/download/templates').exists()){
+			cp "zip:https://github.com/asciidoctor/asciidoctor-backends/archive/${asciidoctorBackendVersion}.zip!asciidoctor-backends-${asciidoctorBackendVersion}",
+				templateDir, recursive:true,overwrite:true
+		}
+		if(!file('build/download/deck.js').exists()){
+			cp "zip:https://github.com/imakewebthings/deck.js/archive/${deckjsVersion}.zip!deck.js-${deckjsVersion}",
+				deckjsDir,recursive:true,overwrite:true
+		}
+	}
+	ant.copy(todir:"${new File(templateDir,'haml/deckjs')}"){
+		fileset(dir:'templates')
+	}
+}
+
+task pdf(type:org.asciidoctor.gradle.AsciidoctorTask,description:"Genera documentación en formato PDF",
+	group:"Documentación"){
+	dependsOn jrubyPrepare
+	requires = ['asciidoctor-diagram']
+
+	logDocuments = true
+
+	gemPath =jruby.gemInstallDir
+
+	options doctype: 'book'
+
+	backends = ['pdf']
+
+	sourceDir = file("src/main/documentacion")
+
+	outputDir = file("build/documentacion")
+	
+	if(project.hasProperty('docs')){
+		println "Using docs ${docs}"
+		sources  {
+			if(docs.indexOf(',')!=-1){
+				docs.split(",").each{
+					include "**/${it}.adoc"
+				}
+			}
+			else{
+				include "**/${docs}.adoc"
+			}
+		}
+	}
+	else{
+//		println "Puede usar -Pdocs=<documento> para solo generar un documento específico"
+	}
+
+	attributes	'build-gradle': file('build.gradle'),
+		'source-highlighter' : 'coderay',
+		'imagesdir':'images',
+		'chapter-label':'',
+		'toc':'left',
+		'icons': 'font',
+		'setanchors':'true',
+		'idprefix':'',
+		'idseparator':'-',
+		'docinfo1':'true',
+		'linkcss':'true',
+		'doctype':'book',
+		'projectDir':projectDir,
+		'gemPath':jruby.gemInstallDir,
+		//Atributos generales
+		'toc-title': 'Contenido',
+		'toclevels': '5',
+		'table-caption':  'Tabla',
+		'note-caption': 'Nota',
+		'figure-caption': 'Figura',
+		'appendix-caption': 'Apéndice'
+
+	resources {
+		from('src/main/documentacion') {
+		 include '**/*.png'
+		 include '**/*.jpg'
+		}
+	}
+}

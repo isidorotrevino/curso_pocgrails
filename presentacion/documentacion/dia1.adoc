@@ -1,0 +1,178 @@
+= Desarrollo de Pruebas de Concepto con Grails
+ROOMIE IT SERVICES <http://roomie-it.org/>
+VERSIÓN 1.0, Mayo 2016
+:deckjs_transition: fade
+:deckjsdir: deck.js/deck.js-master
+:deckjs_theme: swiss
+:navigation: 
+:menu:
+:status:
+:goto:
+:toc:
+
+[[presentacion]]
+== Presentación
+
+* Presentación 
+
+[[objetivo]]
+== Objetivo General del Curso
+
+[.texto]
+Conocer diferentes tecnologías para el desarrollo de pruebas de concepto
+de manera ágil.
+
+== Temario
+
+* Introducción a Git
+** Push y pull
+** Branches y Merges
+* Groovy
+** Introducción
+** Tipos básicos
+** Operadores especiales
+** GStrings
+** Colecciones
+
+== Temario
+
+* Groovy (Cont.)
+** Closures
+** Ranges e iteraciones
+** Sobrecarga de operadores
+** Metaprogrammings
+** Builders
+** XML y JSON
+
+== Temario 
+
+* Gradle
+** Introducción
+** Proyecto simples
+** Tasks
+** Multi-proyectos
+
+== Temario 
+
+* Grails
+** Introducción
+** Arquitectura general
+** GORM
+** Modelo de dominio
+** Constraints
+** Criteria queries
+
+== Introducción a Git
+
+* Sistema de control de versiones distribuido
+* Diseñado por Linus Torvalds
+* Enfocado en el manejo de ramas
+* Herramientas colaborativas
+
+== Git
+
+=== Clone
+
+* Descarga inicial de repositorio remoto
+
+[source,bash]
+----
+git clone https://github.com/isidorotrevino/curso_pocgrails
+----
+
+=== Pull
+
+* Descarga de actualizaciones de un repositorio remoto e integración con los cambios locales (merge)
+** *origin*: Nombre del repositorio remoto
+** *master*: Nombre de la rama remota
+
+[source,bash]
+----
+git pull origin master
+----
+
+== Git
+
+=== Add
+
+* Marca archivos para ser registrados en el repositorio local
+
+[source,bash]
+----
+git add archivo
+----
+
+=== Commit
+
+* Registra los cambios realizados en el repositorio local
+
+[source,bash]
+----
+git commit
+----
+
+== Git
+
+=== Push
+
+* Carga todos los cambios realizados en el repositorio local hacia el repositorio remoto
+
+[source,bash]
+----
+git push origin master
+----
+
+== Git
+
+=== Branch
+
+* Crea una nueva rama o lista las ramas existentes
+
+[source,bash]
+----
+# Crear rama
+git branch <nombre_rama>
+
+# Listar ramas
+git branch -r
+----
+
+=== Checkout
+
+* Cambia la rama activa
+[source,bash]
+----
+git checkout <rama>
+----
+
+== Git
+
+=== Merge
+
+* Une una rama a otra
+
+[source,bash]
+----
+git merge <rama_a_unir>
+----
+
+=== Tag
+
+* Crea una etiqueta para distinguir un commit particular
+
+[source,bash]
+----
+git tag -a <TAG> -m <Mensaje descriptivo del tag>
+----
+
+== Git
+
+=== Práctica 1
+
+* Crear una nueva rama con su nombre
+* Realizar checkout de dicha rama
+* Crear un archivo de texto con su nombre (x ej: bety.txt)
+* Realizar commit y push a su rama (x ej: git push origin bety)
+* Realizar merge con la rama de algún compañero
+
+
