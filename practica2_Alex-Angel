@@ -1,0 +1,52 @@
+class RFC{
+    String id
+}
+class Plomero{
+    String nombre
+    RFC rfc
+    def detail = { return "plomero:${this.nombre}, RFC:${this.rfc?.id ?: '[no rfc]'}" }
+}
+
+class Factura{
+    String folio
+    Plomero plomero
+    String toString(){
+      return folio
+    }
+}
+
+
+class Inventario {
+    List < Factura > facturas = []
+    void plus(Factura factura){
+        facturas << factura
+    }
+    void minus(int idx){
+        facturas.remove(idx)
+    }
+    int cantidad(){
+        return facturas.size()
+    }
+    
+        def detail = { 
+            facturas.each{
+            //println "${it.folio} ${it.plomero.nombre} ${it.plomero.rfc?.id}"
+            println "Folio:${it.folio} ${it.plomero.detail()}"
+             }
+         }
+}
+def plomero1 = new Plomero(nombre: "Pister", rfc: new RFC(id: "CURV181976FV1"))
+def plomero2 = new Plomero(nombre: "El Curt")
+Inventario inv = new Inventario()
+
+
+inv + (new Factura(folio:"666", plomero: plomero1))
+inv + (new Factura(folio:"667", plomero: plomero2))
+inv + (new Factura(folio:"668", plomero: plomero2))
+inv + (new Factura(folio:"669", plomero: plomero1))
+inv + (new Factura(folio:"670", plomero: plomero1))
+println "Inventario: ${inv.cantidad()} facturas"
+println "${inv.detail()}"
+inv - 1
+println "Inventario: ${inv.cantidad()} facturas"
+println "${inv.detail()}"
