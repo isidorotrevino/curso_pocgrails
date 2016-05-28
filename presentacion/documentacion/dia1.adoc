@@ -22,6 +22,12 @@ VERSIÓN 1.0, Mayo 2016
 Conocer diferentes tecnologías para el desarrollo de pruebas de concepto
 de manera ágil.
 
+* Comprender a profundidad el lenguaje Groovy
+* Aplicar Grails para el desarrollo de prototipos rápidos
+* Estructurar proyectos para desarrollo de pruebas de concepto simples, con posibilidad
+de crecimiento a proyectos complejos
+* Aprovechar técnicas de Devops para crear ambientes rápidos
+
 == Temario
 
 * Introducción a Git
@@ -46,14 +52,6 @@ de manera ágil.
 
 == Temario 
 
-* Gradle
-** Introducción
-** Proyecto simples
-** Tasks
-** Multi-proyectos
-
-== Temario 
-
 * Grails
 ** Introducción
 ** Arquitectura general
@@ -61,6 +59,48 @@ de manera ágil.
 ** Modelo de dominio
 ** Constraints
 ** Criteria queries
+
+== Temario
+
+* Grails (Cont.)
+** Capa de Negocio
+*** Servicios / Transaccionalidad
+*** Integración con Spring
+** Capa MVC
+*** Controllers
+*** Interceptors
+*** Groovy Server Pages (GSP)
+
+== Temario
+
+* Grails (Cont.)
+** Capa MVC Avanzada
+*** Javascript / Dojo Toolkit
+*** Spring Security
+** Web Services
+*** Exposición
+**** REST
+**** SOAP
+*** Consumo
+** WsLite
+** Reportes
+*** JasperReports
+
+== Temario 
+
+* Gradle
+** Introducción
+** Proyecto simples
+** Tasks
+** Multi-proyectos
+
+== Temario
+
+* Devops
+** Administración de infraestructura con Ansible
+** Configuración de Ambientes con Docker
+** Control de versiones sobre base de datos con Liquibase
+** Integración de dichos temas a Gradle
 
 == Introducción a Git
 
