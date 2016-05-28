@@ -78,7 +78,6 @@ task html(type:org.asciidoctor.gradle.AsciidoctorTask,description:"Genera docume
 		'doctype':'book',
 		'projectDir':projectDir,
 		'gemPath':jruby.gemInstallDir,
-		'shaape':shaape,
 		//Atributos generales
 		'toc-title': 'Contenido',
 		'toclevels': '5',
