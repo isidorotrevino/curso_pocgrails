@@ -44,7 +44,7 @@ subprojects {
 	
 	repositories {
 		maven{
-			url vintec_main_repository
+			url "http://git.vintec.mx:8888/artifactory/libs-release/"
 		}
 		jcenter()
 		mavenCentral()

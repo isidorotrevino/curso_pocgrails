@@ -30,14 +30,14 @@ de manera ágil.
 * Groovy
 ** Introducción
 ** Tipos básicos
-** Operadores especiales
 ** GStrings
 ** Colecciones
+** Closures
 
 == Temario
 
 * Groovy (Cont.)
-** Closures
+** Operadores especiales
 ** Ranges e iteraciones
 ** Sobrecarga de operadores
 ** Metaprogrammings
@@ -175,4 +175,511 @@ git tag -a <TAG> -m <Mensaje descriptivo del tag>
 * Realizar commit y push a su rama (x ej: git push origin bety)
 * Realizar merge con la rama de algún compañero
 
+== Groovy 
 
+=== Introducción
+
+* Lenguaje que corre sobre la máquina virtual de Java (JVM)
+* No pretende ser un reemplazo a Java
+* Alternativa con sintaxis más amigable
+* Complemento a Java
+* Objetos Java == Objetos Groovy
+
+== Groovy
+
+=== Breve historia
+
+* Originado en 2007
+** Guillaume LaForge
+** Graeme Rocher
+* Mantenimiento
+** G2
+** Pivotal (VMware)
+** Fundación Apache
+
+== Groovy
+
+=== Demostración 1
+
+[source,java]
+----
+package com.roomie;
+
+public class DemoJava implements Comparable<DemoJava> {
+
+	private String nombre;
+	private int edad;
+	
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public int getEdad() {
+		return edad;
+	}
+
+	public void setEdad(int edad) {
+		this.edad = edad;
+	}
+
+	public static void main(String[] args){
+		DemoJava demoJava = new DemoJava();
+		demoJava.setNombre("Juan Perez");
+		demoJava.setEdad(25);
+		
+		System.out.println(demoJava.getNombre()+" tiene "+demoJava.getEdad()+" años ");
+	}
+	
+	public int compareTo(DemoJava o) {		
+		return o.getNombre().compareTo(this.getNombre());
+	}
+
+}
+----
+
+== Groovy
+
+=== Convirtamos la clase Java a Groovy
+
+=== Resultado
+
+[source,groovy]
+----
+package com.roomie
+
+public class DemoGroovy implements Comparable<DemoJava> {
+
+	String nombre
+	int edad
+	
+	static void main(String[] args){
+		DemoJava demoJava = new DemoJava(nombre:"Juan Perez");
+		demoJava.edad = 25
+		
+		println "${demoJava.nombre} tiene ${demoJava.edad} años"
+		
+	}
+	
+	public int compareTo(DemoJava o) {
+		return o.nombre <=> this.edad
+	}
+
+}
+----
+
+== Groovy
+
+=== Tipos básicos
+
+* Todos son objetos
+[source,groovy]
+----
+int var = 5
+println 5.class
+----
+* BigDecimal es un tipo básico
+[source,groovy]
+----
+BigDecimal valor = 20g
+println valor + 32.123123g
+----
+
+== Groovy / Tipos Básicos
+
+* El objeto Class es un tipo básico
+[source,groovy]
+----
+class Prueba{ }
+println Prueba.class
+println Prueba
+----
+
+== Groovy
+
+=== Strings
+
+* String
+** Similar a Java, pero se utiliza comilla simple (') en lugar de la doble (")
+[source,groovy]
+----
+String nombre = 'Juan'
+println nombre
+----
+* GString
+** Versión más robusta, permite interpolación de variables
+** Utiliza comilla doble ("). 
+** La evaluación de variables se realiza mediante la notación ${}
+[source,groovy]
+----
+BigDecimal proporcion = 32.54g
+def valor = "La proporción adecuada debe ser ${proporcion}%"
+println valor
+----
+
+== Groovy / GStrings
+
+* Se puede utilizar una versión multilínea mediante el uso de trible comilla doble (""")
+
+[source,groovy]
+----
+String nombre = 'Juan'
+def valor = """El texto multilínea 
+también permite la interpolación de valores, como la variable nombre=${nombre}
+
+Puede usarse una variación de String normal multilínea utilizando comilla sencilla triple (''')
+"""
+println valor
+----
+
+== Groovy
+
+=== Colecciones
+
+* Las colecciones también son consideradas tipos básicos
+* No es necesario importar java.util
+* Notación especial para listas y mapas
+
+=== Listas
+[source,groovy]
+----
+List lista = [1,2,3,4,5,6,7,8]
+for(int i=0;i<lista.size();i++){
+	println lista[i]
+}
+----
+
+== Groovy / Colecciones
+
+=== Mapas
+
+[source,groovy]
+----
+Map mapa = [ llave1:"valor1",
+llave2:25,
+llave3:[1,2,3]
+]
+for( def entry : mapa.entrySet() ){
+	println "${entry.key}=${entry.value}"
+} 
+----
+
+== Groovy
+
+=== Closures
+
+* Bloque de código
+** Puede recibir parámetros
+** Puede devolver un valor
+** Puede asignarse a una variable
+** Es un objeto (todo es un objeto)
+
+[source,groovy]
+----
+def closure = { mivar -> 
+	println "Hola ${mivar}"
+	return mivar.length()
+}
+def tamaño = closure.call("Pedro")
+println "La variable mide ${tamaño}"
+//También se puede llamar el método directo
+closure("Bety")
+----
+
+== Groovy / Closures
+
+* Existe un parámetro implícito llamado "it"
+[source,groovy]
+----
+def saludo = { println "Hola ${it}" }
+saludo("Mundo")
+----
+* Delegation
+** Permite manejar el responsable de ejecución del closure
+*** *this* --> Clase donde es definido el closure
+*** *owner* --> Objeto donde es definido el closure
+*** *delegate* --> Objeto externo que puede ser definido para ser utilizado internamente por el closure
+
+== Groovy / Closures
+
+=== Delegation
+
+* This (Corresponde a la clase donde se define el closure)
+[source,groovy]
+----
+class Persona{
+    String nombre
+    int edad
+    String toString() { return "${nombre} de edad ${edad}" }
+    String imprimir(){
+        def closure = {
+            String mensaje = this.toString()
+            println mensaje
+            return mensaje
+        }
+        closure()
+    }
+}
+def p = new Persona(nombre:'Juan', edad:23)
+assert p.imprimir() == 'Juan de edad 23'
+----
+
+== Groovy / Closures
+
+=== Delegation
+
+* Owner (El objeto inmediato que lo envuelve, no importa si es clase o closure)
+[source,groovy]
+----
+class NestedClosures {
+    void run() {
+        def nestedClosures = {
+            def cl = {
+              println "THIS ${this.class}"                              
+              println "OWNER ${owner.class}"                              
+             return owner 
+            }                               
+            def result = cl()
+            return result
+        }
+        assert nestedClosures() == nestedClosures            
+    }
+}
+NestedClosures n = new NestedClosures()
+n.run()
+----
+
+== Groovy / Closures
+
+=== Delegation
+
+* Delegate (Objeto externo que el closure utilizará)
+** Por default **delegate==owner**
+** Permite al closure utilizar de manera transparente a su delegate
+[source,groovy]
+----
+class Persona{
+    String nombre    
+}
+def p = new Persona(nombre:"Pepito")
+def closure = { nombre.toUpperCase() }
+closure.delegate = p
+println closure()
+----
+
+== Groovy
+
+=== Closures y colecciones
+
+* **Iteraciones**
+[source,groovy]
+----
+List lista = [1,2,3,4]
+Map mapa = [ llave1:"valor1",llave2:25,llave3:[1,2,3]]
+lista.each{
+	println it
+}
+mapa.each{
+	k,v ->
+	println "${k}=${v}"
+}
+----
+
+== Groovy
+
+=== Closures y colecciones
+
+* **Búsquedas**
+[source,groovy]
+----
+List lista = [1,2,3,4]
+Map mapa = [ llave1:"valor1",llave2:25,llave3:[1,2,3]]
+println lista.find{ it > 3 }
+println mapa.find{	k,v ->	return v instanceof String }
+----
+
+
+== Groovy
+
+=== Closures y colecciones
+
+* **Filtrado**
+[source,groovy]
+----
+List lista = [1,2,3,4]
+Map mapa = [ llave1:"valor1",llave2:25,llave3:[1,2,3]]
+println lista.findAll{ it > 3 }
+println mapa.findAll{	k,v ->	return !(v instanceof String) }
+----
+
+== Groovy
+
+=== Closures y colecciones
+
+* **Procesado (collect)**
+[source,groovy]
+----
+class Persona{
+	String nombre
+	int edad
+}
+def personas = [new Persona(nombre:"Juan",edad:20),new Persona(nombre:"Maria",edad:40)]
+def saludos = personas.collect{ return "${it.nombre} de ${it.edad} años" }
+println saludos
+saludos.each{ print it.class}
+----
+
+== Groovy / Operadores especiales
+
+=== Null/Safe accesor (?.)
+
+[source,groovy]
+----
+class Profesion{
+	String titulo
+}
+class Persona{
+	String nombre
+	Profesion profesion
+}
+try{
+	Persona p1 = new Persona(nombre:"Aldo")
+	Persona p2 = new Persona(nombre:"Hugo")
+	Profesion pr = new Profesion(titulo:"Mto.")
+	p1.profesion=pr
+	println "${p1.profesion.titulo} ${p1.nombre}"
+	println "${p2.profesion.titulo} ${p2.nombre}"
+}catch(NullPointerException exp){
+	println "OOPS!"
+	println exp.message
+}
+Persona p3 = new Persona(nombre:"Fernando")
+Persona p4 = new Persona(nombre:"Isidoro")
+Profesion pr2 = new Profesion(titulo:"Mto.")
+p3.profesion=pr2
+println "${p3?.profesion?.titulo} ${p3.nombre}"
+println "${p4?.profesion?.titulo} ${p4.nombre}"
+----
+
+== Groovy / Operadores especiales
+
+=== Operador Elvis ( ?: )
+
+[source,groovy]
+----
+String titulo = "Lic"
+String tam = titulo != null ? titulo.length() : 0
+println tam
+tam = titulo?.length() ?: 0
+println tam
+----
+
+== Groovy / Operadores especiales
+
+=== Apuntador a método ( .& )
+
+[source,groovy]
+----
+def str = 'ejemplo de referencia a método'            
+def fun = str.&toUpperCase                         
+def upper = fun()
+println upper
+println fun.class 
+----
+
+== Groovy / Ranges 
+
+[source,groovy]
+----
+(1..5).each{
+	println it
+}
+println "---"
+(1..<5).each{
+println it
+}
+println "---"
+enum Puntos { NORTE, ESTE, SUR, OESTE }
+(Puntos.NORTE..Puntos.OESTE).each{
+	println it
+}
+----
+
+== Groovy
+
+=== Sobrecarga de operadores
+
+[grid=cols]
+|===
+| Operador | Método | Operador | Método
+
+| + | a.plus(b) | a[b] | a.getAt(b)
+| - | a.minus(b) | a[b] = c| a.putAt(b, c)
+| * | a.multiply(b) | a in b| b.isCase(a)
+| / | a.div(b)| << | a.leftShift(b)
+| % | a.mod(b) | >> | a.rightShift(b)
+| ** | a.power(b)| >>>| a.rightShiftUnsigned(b)
+| \| | a.or(b)| ++ | a.next()
+| & | a.and(b)| \-- | a.previous()
+| ^ | a.xor(b)| +a | a.positive()
+| as | a.asType(b)| -a | a.negative()
+| a() | a.call()| ~a | a.bitwiseNegate()
+|===
+
+== Groovy
+
+=== Sobrecarga de operadores
+
+[source,groovy]
+----
+class Caja { String unidad }
+class Inventario {
+    List<Caja> cajas = []
+    void plus(Caja caja){
+        cajas << caja
+    }
+    void minus(int idx){
+        cajas.remove(idx)
+    }
+    int cantidad(){
+        return cajas.size()
+    }
+}
+Inventario inv = new Inventario()
+inv + (new Caja(unidad:"5kg"))
+inv + (new Caja(unidad:"10kg"))
+println "Inventario: ${inv.cantidad()} cajas"
+inv - 1
+println "Inventario: ${inv.cantidad()} cajas"
+----
+
+== Groovy
+
+=== Práctica 2
+
+* Crear un programa de administración de facturas para un plomero
+* Crear una clase que contenga todas las facturas generadas
+* Utilizar sobrecarga de operadores en la mayor cantidad de operaciones
+* Utilizar closures para validación de datos
+* Simular la emisión de 5 facturas con diferentes escenarios
+
+////
+** Metaprogrammings
+** Builders
+** XML y JSON
+* Gradle
+** Introducción
+** Proyecto simples
+** Tasks
+** Multi-proyectos
+* Grails
+** Introducción
+** Arquitectura general
+** GORM
+** Modelo de dominio
+** Constraints
+** Criteria queries
+////
