@@ -42,26 +42,26 @@ VERSIÓN 1.0, Junio 2016
                                                   
           +------------------+------------------+
           |                                     |
-          |      		  FRONTEND              |
-          |			    Controllers             |
+          |               FRONTEND              |
+          |             Controllers             |
           |         Command / ModelAndView      |
-          |					GSP                 |
+          |                 GSP                 |
           |                                     |
           +-------------------------------------+                                                  
           |                                     |
           |               SERVICES              |
-          |			    Spring Beans            |
-          |			 Transaccionalidad          |
+          |             Spring Beans            |
+          |          Transaccionalidad          |
           |                                     |
           +-------------------------------------+
           |                                     |
           |            DOMAIN LAYER             |
-          |				   GORM	                |
-          |				 Hibernate              |
+          |               GORM	                |
+          |              Hibernate              |
           |                                     |
           +-------------------------------------+          					 
-							 |
-							 v
+                             |
+                             v
           +------------------+------------------+
           |                                     |
           |                RDBMS                |
@@ -168,6 +168,21 @@ grails create-domain-class <package.clase>
 ** Plantear el modelo de dominio para una aplicación de facturación
 ** Cada quien una clase
 ** 15 minutos
+** Probar el almacenado en Base de datos
+[source,groovy]
+----
+objeto.save()
+----
+** Mostrar el listado de objetos almacenados:
+[source,groovy]
+----
+Clase.list()
+----
+** Obtener un objeto por su Id:
+[source,groovy]
+----
+Clase.get(<id>)
+----
 
 == GRAILS / GORM
 
@@ -199,13 +214,89 @@ class Modelo{
 *** **unique** -> Verifica que un valor o grupo de valores no se repita
 *** **validator** -> Permite la creación de una validación personalizada
 
+== GRAILS / GORM
+
+* Práctica 3-B
+** Aplicar la mayor parte de los constraints al modelo de dominio
+** 15 minutos
+
 == Grails / GORM
 
 * Relaciones
 ** Uno a uno
+*** Se aplica cuando una clase es propiedad de otra:
+[source,groovy]
+----
+class Hotel{
+	String nombre
+	Recepcion recepcion
+}
+class Recepcion{
+	String ubicacion
+	Hotel hotel
+}
+----
+*** Se recomienda que una clase sea la que domine a la otra mediante el atributo **belongsTo**
+[source,groovy]
+----
+class Hotel{
+	String nombre
+	Recepcion recepcion
+}
+class Recepcion{
+	String ubicacion
+	static belongsTo = [hotel:Hotel]
+}
+----
+
+== Grails / GORM
+
+* Relaciones
+** Uno a muchos
+*** Se recomienda utilizar el atributo **hasMany**
+*** Se recomienda que la clase derivada también tenga un atributo **belongsTo**
+[source,groovy]
+----
+class Hotel{
+	String nombre
+	Recepcion recepcion
+	static hasMany = [habitaciones:Habitacion]
+}
+class Habitacion{
+	int piso
+	int numero
+	static belongsTo = [hotel:Hotel]
+}
+----
+
+== Grails / GORM
+
+* Relaciones
+** Muchos a muchos
+*** Ambas clases tendrán el atributo **hasMany**
+*** Una deberá llevar el atributo **belongsTo** (Puede indicar solo la clase)
+[source,groovy]
+----
+class Hotel{
+	String nombre
+	Recepcion recepcion
+	static hasMany = [habitaciones:Habitacion,huespedes.Huesped]
+}
+class Huesped{
+	String nombre
+	static hasMany = [hoteles:Hotel]
+	static belongsTo = Hotel
+}
+----
+
+== GRAILS / GORM
+
+* Práctica 3-C
+** Relacionar el modelo de dominio entre sí
+** 15 minutos
 
 
-** Constraints
+
 ** Criteria queries
 
 * Grails (Cont.)
