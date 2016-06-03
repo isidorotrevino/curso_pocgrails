@@ -76,6 +76,20 @@ VERSIÓN 1.0, Junio 2016
 **** **conf/** -> Configuración de la aplicación 
 ..... **application.groovy** -> Parámetros de funcionamiento de la aplicación
 ..... **application.yml** -> Parámetros de funcionamiento de la aplicación
+***** **spring/resources.groovy** -> Beans de Spring adicionales
+
+== GRAILS
+
+* Estructura de directorios / Archivos clave
+** /
+*** **grails-app/**
+**** **controllers/** -> Controladores para Frontend 
+**** **domain/** -> Modelo de dominio (GORM)
+**** **i18n/** -> Archivos de internacionalización
+**** **init/** -> Archivos de inicialización
+**** **services/** -> Servicios de negocio
+**** **taglib/** -> Librerías de tag utilizables en los GSP
+**** **views/** -> GSP (Groovy Server Pages)
 
 == GRAILS / INSTALACIÓN
 
