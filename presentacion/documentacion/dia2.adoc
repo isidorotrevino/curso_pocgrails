@@ -10,6 +10,13 @@ VERSIÓN 1.0, Junio 2016
 :goto:
 :toc:
 
+== Convenciones generales de código
+
+* Nombrado:
+** **Clases:** Comienza con mayúsculas, cada palabra nueva con mayúscula (CamelCase)
+** **Variables y atributos:** Sustantivos, la primera con minúsculas
+** **Métodos:** Verbos, la primera con minúsculas 
+
 == GRAILS / Introducción
 
 * Framework para desarrollo de aplicaciones Web
@@ -35,22 +42,22 @@ VERSIÓN 1.0, Junio 2016
                                                   
           +------------------+------------------+
           |                                     |
-          |      		  FRONTEND				|
-          |			    Controllers				|
-          |         Command / ModelAndView		|
-          |					GSP					|
+          |      		  FRONTEND              |
+          |			    Controllers             |
+          |         Command / ModelAndView      |
+          |					GSP                 |
           |                                     |
           +-------------------------------------+                                                  
           |                                     |
           |               SERVICES              |
-          |			    Spring Beans			|
-          |			 Transaccionalidad			|
+          |			    Spring Beans            |
+          |			 Transaccionalidad          |
           |                                     |
           +-------------------------------------+
           |                                     |
           |            DOMAIN LAYER             |
-          |				   GORM					|
-          |				 Hibernate				|
+          |				   GORM	                |
+          |				 Hibernate              |
           |                                     |
           +-------------------------------------+          					 
 							 |
@@ -58,7 +65,7 @@ VERSIÓN 1.0, Junio 2016
           +------------------+------------------+
           |                                     |
           |                RDBMS                |
-          |				    (H2)				1
+          |				    (H2)                |
           |                                     |
           +-------------------------------------+     
 ....
@@ -90,8 +97,36 @@ VERSIÓN 1.0, Junio 2016
 **** **services/** -> Servicios de negocio
 **** **taglib/** -> Librerías de tag utilizables en los GSP
 **** **views/** -> GSP (Groovy Server Pages)
+** **src/main/groovy** -> Código fuente Groovy / Java diverso
 
 == GRAILS / INSTALACIÓN
+
+* Modo práctico ( SDK Manager ) http://sdkman.io/
+[source,bash]
+----
+curl -s "https://get.sdkman.io" | bash
+----
+* Modo manual 
+** Descargar Kit de Sitio Web ( https://grails.org/download.html )
+** Descomprimir
+** Agregar variable de Ambiente GRAILS_HOME
+[source,bash]
+----
+export GRAILS_HOME=/path/a/grails
+----
+** Agregar directorio **bin** al PATH
+[source,bash]
+----
+export PATH=$GRAILS_HOME/bin:$PATH
+----
+
+== GRAILS 
+
+* Creación de aplicación
+[source,bash]
+----
+grails create-app <aplicacion>
+----
 
 == GRAILS / GORM
 
@@ -109,12 +144,67 @@ VERSIÓN 1.0, Junio 2016
 *** Atributos
 *** Papeles
 *** Relaciones
+** Modelo anémico
+*** Simple mapeo de tablas a objetos
+** Modelo Enriquecido
+*** Colección de objetos que expone comportamiento
+*** Aplican patrones de diseño
+*** Se enfocan en el "que", no en el "como"
 
 == GRAILS / GORM
 
-** Arquitectura general
-** GORM
-** Modelo de dominio
+* Modelo de dominio
+** Representado como clases Groovy
+** Describen el modelo de información a persistir
+** Contienen reglas para el comportamiento de sus atributos (Constraints)
+[source,bash]
+----
+grails create-domain-class <package.clase>
+----
+
+== GRAILS / GORM
+
+* Práctica 3-A
+** Plantear el modelo de dominio para una aplicación de facturación
+** Cada quien una clase
+** 15 minutos
+
+== GRAILS / GORM
+
+* Constraints
+** Reglas de negocio que delimitan el comportamiento de los atributos en el modelo de dominio
+** Closure estático dentro de la clase:
+[source,groovy]
+----
+class Modelo{
+	String modelo
+	String descripcion
+	
+	static constraints = {
+		modelo(maxSize:25)
+		descripcion(nullable:true,matches: "[a-zA-Z]+")		
+	}
+}
+----
+
+== GRAILS / GORM
+
+* Constraints
+** Principales constraints:
+*** **nullable** -> Indica si un valor puede ser nulo o no
+*** **email** -> Que el valor coincida con un correo electrónico (formato)
+*** **matches** -> Se asegura que el atributo coincida con la expresión regular planteada
+*** **minSize / maxSize** -> Delimita el tamaño de un string
+*** **min / max** -> Delimita el valor mínimo / máximo de un atributo
+*** **unique** -> Verifica que un valor o grupo de valores no se repita
+*** **validator** -> Permite la creación de una validación personalizada
+
+== Grails / GORM
+
+* Relaciones
+** Uno a uno
+
+
 ** Constraints
 ** Criteria queries
 
