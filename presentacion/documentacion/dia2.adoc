@@ -1,0 +1,120 @@
+= Desarrollo de Pruebas de Concepto con Grails
+ROOMIE IT SERVICES <http://roomie-it.org/>
+VERSIÓN 1.0, Junio 2016
+:deckjs_transition: fade
+:deckjsdir: deck.js/deck.js-master
+:deckjs_theme: swiss
+:navigation: 
+:menu:
+:status:
+:goto:
+:toc:
+
+== GRAILS / Introducción
+
+* Framework para desarrollo de aplicaciones Web
+** "Full Stack"
+*** Trae todos los elementos necesarios para el desarrollo de una aplicación completa
+** Configuración por convención
+*** Defaults sensibles
+
+== GRAILS / Introducción
+
+* Objetivos principales
+** Reutilizar tecnologías Java como Spring y Hibernate en una sola interface
+** Modo de desarrollo completo
+*** Recarga automática
+*** Servidor Web integrado ( Tomcat / Jetty )
+* No uso de XML
+
+== GRAILS / Arquitectura General
+
+[shaape]
+....
+
+                                                  
+          +------------------+------------------+
+          |                                     |
+          |      		  FRONTEND				|
+          |			    Controllers				|
+          |         Command / ModelAndView		|
+          |					GSP					|
+          |                                     |
+          +-------------------------------------+                                                  
+          |                                     |
+          |               SERVICES              |
+          |			    Spring Beans			|
+          |			 Transaccionalidad			|
+          |                                     |
+          +-------------------------------------+
+          |                                     |
+          |            DOMAIN LAYER             |
+          |				   GORM					|
+          |				 Hibernate				|
+          |                                     |
+          +-------------------------------------+          					 
+							 |
+							 v
+          +------------------+------------------+
+          |                                     |
+          |                RDBMS                |
+          |				    (H2)				1
+          |                                     |
+          +-------------------------------------+     
+....
+
+== GRAILS
+
+* Estructura de directorios / Archivos clave
+** /
+*** **build.gradle** -> Configuración para la construcción del proyecto proyecto
+.... Dependencias
+.... Plugins
+*** **gradle.properties** -> Elementos llave/valor complemento a build.gradle
+*** **grails-app/** -> Componentes principales de Grails
+**** **assets/** -> Elementos "estáticos" utilizados por la capa web (CSS/Javascript/imágenes)
+**** **conf/** -> Configuración de la aplicación 
+..... **application.groovy** -> Parámetros de funcionamiento de la aplicación
+..... **application.yml** -> Parámetros de funcionamiento de la aplicación
+
+== GRAILS / INSTALACIÓN
+
+== GRAILS / GORM
+
+* GORM
+** Groovy Object / Relational Mapping
+** Integración entre el modelo OO y las bases de datos relacionales
+** Basado en Hibernate
+** Actualmente soporta modelos no relacionales
+** Aprovechas las características dinámicas de Groovy 
+
+== GRAILS / GORM
+
+* Modelo de Dominio
+** Modelo conceptual de todos los temas relacionados con un problema específico
+*** Atributos
+*** Papeles
+*** Relaciones
+
+== GRAILS / GORM
+
+** Arquitectura general
+** GORM
+** Modelo de dominio
+** Constraints
+** Criteria queries
+
+* Grails (Cont.)
+** Capa de Negocio
+*** Servicios / Transaccionalidad
+*** Integración con Spring
+** Capa MVC
+*** Controllers
+*** Interceptors
+*** Groovy Server Pages (GSP)
+
+** Sobrecarga de operadores
+** Metaprogrammings
+** Builders
+** XML y JSON
+
