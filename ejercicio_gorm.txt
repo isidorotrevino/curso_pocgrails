@@ -36,4 +36,22 @@ Factura.list().each{
    }
 }
 
+import com.roomie.curso.facturacion.*
+
+Producto.findAllByDescripcionLike("Manz%")
+
+Factura.findAllByCliente(Cliente.get(2))
+
+Factura.createCriteria().list{
+    eq('cliente',Cliente.get(2))
+    productos{
+        like('descripcion','Manz%')
+    }
+}
+
+
+grails generate-all com.roomie.curso.facturacion.Producto
+grails run-app
+
+
 

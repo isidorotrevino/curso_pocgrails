@@ -13,4 +13,9 @@ class Domicilio {
 		numExterior(nullable:true)
 		colonia(nullable:true)
     }
+
+	String toString(){
+		return "CALLE ${calle} ${numExterior} Col. ${colonia}"
+	}
+
 }
