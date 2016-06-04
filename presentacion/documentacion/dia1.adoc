@@ -706,6 +706,11 @@ println "Inventario: ${inv.cantidad()} cajas"
 * Utilizar closures para validación de datos
 * Simular la emisión de 5 facturas con diferentes escenarios
 
+
+== Pendientes
+
+* Comentarios a isidoro.trevino@vintec.mx
+
 ////
 ** Metaprogrammings
 ** Builders

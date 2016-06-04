@@ -297,7 +297,10 @@ class Huesped{
 
 
 
+////
+** Dynamic finders
 ** Criteria queries
+
 
 * Grails (Cont.)
 ** Capa de Negocio
@@ -312,4 +315,4 @@ class Huesped{
 ** Metaprogrammings
 ** Builders
 ** XML y JSON
-
+////

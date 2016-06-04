@@ -1,0 +1,39 @@
+import com.roomie.curso.facturacion.*
+
+Producto producto1 = new Producto(clave:"AAA",
+descripcion:"Manzana",precio:10g)
+producto1.save()
+
+Cliente cliente = new Cliente()
+cliente.nombre="Juan"
+cliente.rfc="TEGI8205131I1"
+cliente.direccion=new Domicilio(
+calle:"Reforma",numeroExterior:"10",
+colonia:"Centro"
+)
+cliente.telefono="55115665"
+cliente.email="chololo@gmail.com"
+cliente.save()
+Cliente.list().each{
+    println it.direccion.calle
+}
+
+Factura factura = new Factura()
+factura.cliente = cliente
+factura.folio = 12312
+factura.fecha = java.time.LocalDate.now()
+factura.total = 1533.25g
+factura.save()
+factura.addToProductos(Producto.get(1))
+factura.save(flush:true)
+
+println Producto.list()
+Factura.list().each{
+   println it.cliente.nombre
+   println it.productos.collect{ 
+     Producto producto ->
+     return producto.descripcion
+   }
+}
+
+
